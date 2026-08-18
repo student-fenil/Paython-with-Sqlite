@@ -1,4 +1,4 @@
-import num
+import num as n
 n1=int(input("enter first no:"))
 n2=int(input("enter second no:"))
 a=num.addnum(n1,n2)

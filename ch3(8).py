@@ -1,43 +1,46 @@
-import sqlite3
+import sqlite3 as sq
 
-conn = sqlite3.connect('college.db')
-cur = conn.cursor()
+# Connect to database and create sample table if it does not exist
+conn = sq.connect("fenil.db")
+conn.execute("""
+CREATE TABLE IF NOT EXISTS tblstud_result (
+    rno INTEGER PRIMARY KEY,
+    s1 INTEGER,
+    s2 INTEGER,
+    s3 INTEGER,
+    s4 INTEGER,
+    s5 INTEGER
+)
+""")
 
-# create table if not exists
-cur.execute('''CREATE TABLE IF NOT EXISTS class (
-                no INTEGER PRIMARY KEY,
-                total_students INTEGER)''')
+# Input cutoff marks from user
+min_marks = int(input("Enter minimum marks: "))
 
-# take input from user
-no = int(input("Enter class number: "))
-stud = int(input("Enter total no. of students: "))
+# Fetch records where BOTH Subject 1 and Subject 2 are greater than entered marks
+cursor = conn.execute(
+    "SELECT * FROM tblstud_result WHERE s1 > ? AND s2 > ?", 
+    (min_marks, min_marks)
+)
+records = cursor.fetchall()
 
-# insert if not exists, else update
-cur.execute("SELECT * FROM class WHERE no=?", (no,))
-row = cur.fetchone()
-
-if row:
-    cur.execute("UPDATE class SET total_students=? WHERE no=?", (stud, no))
+# Display matching records
+if records:
+    print("\n--- Matching Student Records ---")
+    print(f"{'Roll No':<10}{'S1':<6}{'S2':<6}{'S3':<6}{'S4':<6}{'S5':<6}")
+    print("-" * 40)
+    for row in records:
+        print(f"{row[0]:<10}{row[1]:<6}{row[2]:<6}{row[3]:<6}{row[4]:<6}{row[5]:<6}")
 else:
-    cur.execute("INSERT INTO class (no, total_students) VALUES (?, ?)", (no, stud))
+    print("\nNot enough marks / No records found matching the criteria.")
 
-conn.commit()
-
-# display all records
-cur.execute("SELECT * FROM class")
-rows = cur.fetchall()
-
-print("\nClass No. | Total Students")
-for r in rows:
-    print(r[0], "       |", r[1])
-
+# Close connection
 conn.close()
 
 
-'''
-Enter class number: 1
-Enter total no. of students: 3
 
-Class No. | Total Students
-1        | 3
+'''
+Enter minimum marks: 80
+
+Not enough marks / No records found matching the criteria.
+
 '''

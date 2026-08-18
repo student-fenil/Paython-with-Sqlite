@@ -1,41 +1,47 @@
-import sqlite3
+import sqlite3 as sq
 
-conn = sqlite3.connect("dbcollege.db")
-print("Connected")
-
-# Create table
+# Connect to database (and create tblclass if it doesn't exist)
+conn = sq.connect("dbcollege26.db")
 conn.execute("""
 CREATE TABLE IF NOT EXISTS tblclass (
-    no INTEGER,
-    name TEXT,
-    ns INTEGER
+    class_no INTEGER,
+    class_name TEXT,
+    total_students INTEGER
 )
 """)
 
-n = int(input("Enter number of records: "))
+# User input
+no = int(input("Enter class no: "))
+name = input("Enter class name: ")
+ns = int(input("Enter total number of students: "))
 
-for i in range(n):
-    print("Enter details for record", i + 1)
-
-    no = int(input("Enter class no: "))
-    name = input("Enter class name: ")
-    ns = int(input("Enter total number of students: "))
-
-    conn.execute(
-        "INSERT INTO tblclass (no, name, ns) VALUES (?, ?, ?)",
-        (no, name, ns)
-    )
-
+# Insert record using parameterized query (prevents syntax/SQL errors)
+conn.execute("INSERT INTO tblclass VALUES (?, ?, ?)", (no, name, ns))
 conn.commit()
 
-print("Records inserted")
+# Fetch and display records
+a = conn.execute("SELECT * FROM tblclass")
+r = a.fetchall()
 
-# Display records
-c = conn.execute("SELECT * FROM tblclass")
+for i in r:
+    print("class no:", i[0])
+    print("class name:", i[1])
+    print("no of students:", i[2])
 
-for i in c:
-    print("Class no:", i[0])
-    print("Class name:", i[1])
-    print("Total number of students:", i[2])
-
+# Close connection
 conn.close()
+
+
+
+
+'''
+Enter class no: 1
+Enter class name: sybca
+Enter total number of students: 3
+class no: 101
+class name: div-2
+no of students: 10
+class no: 1
+class name: sybca
+no of students: 3
+'''

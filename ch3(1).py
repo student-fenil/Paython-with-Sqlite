@@ -1,18 +1,23 @@
-# Program to create table and to insert records
-
 import sqlite3
 
-conn = sqlite3.connect('dbcollege26.db')
+conn = sqlite3.connect('database.db')
+
 print('Connected')
 
-conn.execute('CREATE TABLE tblstudent (id int, name varchar(20))')
+conn.execute('CREATE TABLE IF NOT EXISTS tblstud (id INT, name VARCHAR(70))')
+
 print('Table created')
 
-conn.execute("INSERT INTO tblstudent VALUES (1,'Jinal')")
+conn.execute("INSERT INTO tblstud VALUES (3, 'Fenil')")
 
-conn.execute("INSERT INTO tblstudent VALUES (2,'Fenil')")
+conn.commit()
 
-conn.execute("INSERT INTO tblstudent VALUES (3,'Jenil')")
-
-conn.execute('commit')
 print('Record inserted')
+
+
+
+'''
+Connected
+Table created
+Record inserted
+'''

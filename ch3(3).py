@@ -1,29 +1,21 @@
 import sqlite3
 
-# Connect database
-conn = sqlite3.connect("dbcollege.db")
-print("Connected")
+conn = sqlite3.connect("dbguide26.db")
 
-# Create table
-conn.execute("""
-CREATE TABLE IF NOT EXISTS tblstd (
-    rno INTEGER,
-    name TEXT
-)
-""")
+no = int(input("Enter roll no: "))
+nm = input("Enter stud name: ")
 
-print("Table created")
-
-# Insert record
 conn.execute(
-    "INSERT INTO tblstd (rno, name) VALUES (?, ?)",
-    (1, "Jinal")
+    "INSERT INTO tblstud VALUES (?, ?)",
+    (no, nm)
 )
 
-# Save changes
 conn.commit()
 
-print("Record inserted")
+c = conn.execute("SELECT * FROM tblstud")
 
-# Close connection
+for i in c:
+    print("Roll no:", i[0])
+    print("Name:", i[1])
+
 conn.close()
