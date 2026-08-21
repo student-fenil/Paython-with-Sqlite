@@ -9,7 +9,7 @@ a =conn.execute('select * from tblstud')
 b = a.fetchone()
 print(b)
 
-b = a.fetchone()
+etchone()
 print(b)
 
 print('demantion wise')
